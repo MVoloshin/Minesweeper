@@ -8,7 +8,7 @@ public class Level {
 	
 	String sName;
 	public int nCols,nRows,nTotalMines;
-	final private int MIN_ROWS=9,MAX_ROWS=30,MIN_COLS=9,MAX_COLS=24,MIN_MINES=10;
+	final private int MIN_ROWS=9,MAX_ROWS=30,MIN_COLS=9,MAX_COLS=24,MIN_MINES=10; // limits
 		
 	Level(String name, int cols,int rows, int mines)
 	{
@@ -18,7 +18,7 @@ public class Level {
 	
 	public void setParameters(int cols,int rows, int mines)
 	{	
-		// Assign values and make sure that they aren't out of range
+		// Assign values and make sure they aren't out of range (otherwise correct them)
 		nCols=cols;
 		nRows=rows;
 		nTotalMines=mines;

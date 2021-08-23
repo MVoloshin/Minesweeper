@@ -20,7 +20,7 @@ import javax.swing.text.AbstractDocument;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 
-public class SettingsWindow extends JDialog {
+public class GameParamsWindow extends JDialog {
 	JComboBox<Level> cbDifficulty;
 	JLabel lblDifficulty,lblCols,lblRows,lblMines;
 	JNumericTextField txtCols,txtRows,txtMines;
@@ -47,8 +47,10 @@ public class SettingsWindow extends JDialog {
 			doc.setDocumentFilter(new DocumentFilter() {
 	            public void replace(FilterBypass fb, int offset, int len,
 	                    String str, AttributeSet a) throws BadLocationException {
+	            		// JNumericTextField allows only digits
 	            		String sNumericOnly=str.replaceAll("[^0-9]", "");
 	            		super.replace(fb, offset,len, sNumericOnly ,a);
+	            		// restrict text length
 	            		if(doc.getLength()>nMaxLength) doc.replace(0, doc.getLength(), doc.getText(0, doc.getLength()).substring(0,nMaxLength),a);
 	            }
 	        });
@@ -56,6 +58,7 @@ public class SettingsWindow extends JDialog {
 		
 		public int getNumber()
 		{
+			// get integer from JNumericTextField instance
 			if(getText().isEmpty()) return 0;
 			return Integer.parseInt(getText());
 		}
@@ -68,15 +71,16 @@ public class SettingsWindow extends JDialog {
 	
 	public void setCustomValuesAllowed(boolean bFlag)
 	{
+		//(dis)allow setting custom values
 		txtCols.setEditable(bFlag);
 		txtRows.setEditable(bFlag);
 		txtMines.setEditable(bFlag);
 	}
 	
-	public SettingsWindow()
+	public GameParamsWindow()
 	{
 		initSettingsUI();
-		setModal(true);
+		setModal(true); // this is a dialog window
 	}
 	
 	Level showDialog(JFrame frmParent)
@@ -85,11 +89,11 @@ public class SettingsWindow extends JDialog {
 		bCancelled=false;
 		this.frmParent=frmParent;
 		setLocationRelativeTo(this.frmParent);
-		cbDifficulty.setSelectedItem(cbDifficulty.getSelectedItem());
+		cbDifficulty.setSelectedItem(cbDifficulty.getSelectedItem()); // refresh text fields
 		setVisible(true);
-		if(bCancelled) { return null; }
-		selectedLevel=((Level)cbDifficulty.getSelectedItem());
-		selectedLevel.setParameters(txtCols.getNumber(), txtRows.getNumber(), txtMines.getNumber());
+		if(bCancelled) { return null; } // dialog was closed with "X" button
+		selectedLevel=((Level)cbDifficulty.getSelectedItem()); // get selected level
+		selectedLevel.setParameters(txtCols.getNumber(), txtRows.getNumber(), txtMines.getNumber()); // update level info
 		return selectedLevel;
 	}
 	
@@ -103,9 +107,9 @@ public class SettingsWindow extends JDialog {
 		pnlCustomize = new JPanel(new FlowLayout());
 		lblDifficulty= new JLabel("Difficulty level");
 		cbDifficulty = new JComboBox<Level>();
-		txtCols = new JNumericTextField(2);
-		txtRows = new JNumericTextField(2);
-		txtMines = new JNumericTextField(3);
+		txtCols = new JNumericTextField(2); // number of cols
+		txtRows = new JNumericTextField(2); // number of rows
+		txtMines = new JNumericTextField(3); // number of mines
 		cbDifficulty.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e) {
 				Level selectedLevel=(Level)((JComboBox<Level>)e.getSource()).getSelectedItem();
@@ -115,7 +119,7 @@ public class SettingsWindow extends JDialog {
 				setCustomValuesAllowed(selectedLevel.sName=="Custom");
 			}
         });
-		for(Level lvl: Level.arrPredefinedLevels) cbDifficulty.addItem(lvl);
+		for(Level lvl: Level.arrPredefinedLevels) cbDifficulty.addItem(lvl); // push predefined levels to combobox
 		lblCols = new JLabel("Columns:");
 		lblRows = new JLabel("Rows:");
 		lblMines = new JLabel("Mines:");
@@ -123,7 +127,8 @@ public class SettingsWindow extends JDialog {
 		btnStart.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				setVisible(false);
+				setVisible(false); // "Start" button is pressed - dialog should be closed
+				// Now parent window will get the selected level and we are ready to start the game
 			}
 		});	
 		pnlBasic.add(lblDifficulty);
@@ -143,13 +148,15 @@ public class SettingsWindow extends JDialog {
 		addWindowListener( new WindowAdapter() {
 		      @Override
 		      public void windowClosing(WindowEvent we) {
-		        bCancelled=true;
+		        bCancelled=true; // "X" button was clicked
+		        // Dialog is cancelled and game won't be started
 		      }
 		      
 		      @Override
 		      public void windowActivated(WindowEvent we)
 		      {
-		    	  frmParent.setVisible(true);
+		    	// if dialog is activated - make it's parent visible too
+		    	  frmParent.setVisible(true); 
 		      }
 		    } );
 	}

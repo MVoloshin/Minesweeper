@@ -29,7 +29,7 @@ public class GamePanel extends JPanel
 	
 	boolean bFirstClick = true; // mines are planted after first click
 	
-	MouseAdapter ma = new MouseAdapter() {
+	MouseAdapter userClickHandler = new MouseAdapter() {
 		public void mousePressed(MouseEvent me) { 
 			int x = me.getX();
 			int y = me.getY();
@@ -64,7 +64,7 @@ public class GamePanel extends JPanel
 			bFirstClick=true;
 		}
 		btnRestart.setText("Restart");
-		if(myGame.getMouseListeners().length==0) myGame.addMouseListener(ma); // enable mouse input if it's disabled
+		if(myGame.getMouseListeners().length==0) myGame.addMouseListener(userClickHandler); // enable mouse input if it's disabled
 		lblMines.setText(String.format("%03d", myGame.nMines));
 		lblTime.setText("000");
 		myGame.invalidate();
@@ -76,7 +76,7 @@ public class GamePanel extends JPanel
 		tmGame.stop();
 		if(state==Game.GameStatus.VICTORY) btnRestart.setText("You Win!");
 		else btnRestart.setText("You Lose!");
-		myGame.removeMouseListener(ma); // disable mouse input
+		myGame.removeMouseListener(userClickHandler); // disable mouse input
 	}
 	
 	public GamePanel()

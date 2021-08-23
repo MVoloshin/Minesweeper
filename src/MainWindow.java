@@ -18,7 +18,7 @@ public class MainWindow {
 
 	private JFrame frame;
 	GamePanel pnlGameUI=new GamePanel();
-	SettingsWindow dlgSettings = new SettingsWindow();
+	GameParamsWindow dlgNewGame = new GameParamsWindow();
 	static Image appIcon;
 	/**
 	 * Launch the application.
@@ -62,10 +62,10 @@ public class MainWindow {
 		JMenuItem itemExit = new JMenuItem("Exit");
 		itemNewGame.addActionListener(new ActionListener() {
 		    public void actionPerformed(ActionEvent ev) {
-		    	Level lvlChosen = dlgSettings.showDialog(frame);
-		    	if(lvlChosen!=null)
+		    	Level lvlChosen = dlgNewGame.showDialog(frame);
+		    	if(lvlChosen!=null) // if dialog was just closed with "X" button - do nothing
 		    	{
-		    		pnlGameUI.startGame(lvlChosen, false);
+		    		pnlGameUI.startGame(lvlChosen, false); // start a new game (level was set inside the dialog)
 		    		frame.pack();
 		    	}
 		    }
@@ -76,8 +76,7 @@ public class MainWindow {
 		    }
 		});
 		mnuAbout.addMouseListener(new MouseAdapter() {
-		    public void mousePressed(MouseEvent me) {
-		    	
+		    public void mousePressed(MouseEvent me) {	
 		    	JOptionPane.showMessageDialog(frame,"Minesweeper 1.0, 2021",
 		    		    "About",JOptionPane.INFORMATION_MESSAGE,new ImageIcon(appIcon));
 		    }

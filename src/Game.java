@@ -16,6 +16,7 @@ public class Game extends JPanel {
 	
 	public Game(int cols, int rows, int mines)
 	{
+		// start a new game
 		this.nCols=cols;
 		this.nRows=rows;
 		this.nMines=mines;
